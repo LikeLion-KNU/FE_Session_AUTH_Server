@@ -9,7 +9,7 @@ export class UserModel {
     @Column({ unique: true })
     userId: string;
 
-    @Column()
+    @Column({ select: false })
     userPw: string;
 
     @Column()

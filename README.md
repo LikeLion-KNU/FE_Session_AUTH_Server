@@ -1,73 +1,219 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+<h1 align="center">멋쟁이사자처럼 12기 프론트엔드 세션 <br/> Authentication & Authorization 실습 서버 </h1>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+<div align="center">
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+![nest](https://img.shields.io/badge/Nest_JS-202020?style=for-the-badge&logo=nestjs&logoColor=E0234E)
+![typeorm](https://img.shields.io/badge/TypeORM-202020?style=for-the-badge&logo=nestjs&logoColor=E0234E)
+![sqlite](https://img.shields.io/badge/SQLite-202020?style=for-the-badge&logo=sqlite&logoColor=008ED2)
+![jwt](https://img.shields.io/badge/JSON_WEB_TOKEN-202020?style=for-the-badge&logo=jsonwebtokens&logoColor=eeeeee)
 
-## Description
+</div>
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+# 주의 사항
 
-## Installation
+본 서버는 멋쟁이 사자처럼 12기 프론트엔드 교육세션 (인증 및 인가)에 사용되는 실습서버로
+<br/>
+비밀번호는 암호화되어 저장되지 않습니다! 노출을 주의해주세요!
+
+# 서버 실행
 
 ```bash
 $ npm install
-```
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
 $ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
 
-## Test
+# API Documentation
 
-```bash
-# unit tests
-$ npm run test
+## 1. 회원가입
 
-# e2e tests
-$ npm run test:e2e
+### **Request**
 
-# test coverage
-$ npm run test:cov
+URI : `/auth/signup`
+<br>
+METHOD : `POST`
+<br>
+Body :
+
+```js
+{
+  "userId" : "example",
+  "userPw" : "qwer1234!",
+  "nickname" : "mynickname"
+}
 ```
 
-## Support
+### **Response**
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Status Code : 201 (성공)
+<br>
+ResponseBody
 
-## Stay in touch
+```js
+{
+    "token": "JWT.ACCESS.TOKEN"
+}
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## 2. 로그인
 
-## License
+### **Request**
 
-Nest is [MIT licensed](LICENSE).
+URI : `/auth/signin`
+<br>
+METHOD : `POST`
+<br>
+Body :
+
+```js
+{
+  "userId" : "example",
+  "userPw" : "qwer1234!"
+}
+```
+
+### **Response**
+
+Status Code : 201 (성공)
+<br>
+ResponseBody
+
+```js
+{
+    "token": "JWT.ACCESS.TOKEN"
+}
+```
+
+<br>
+Status Code : 401 (실패)
+<br>
+Body :
+
+```js
+{
+    "message": "잘못된 비밀번호입니다",
+    "error": "Unauthorized",
+    "statusCode": 401
+}
+```
+
+<br>
+Status Code : 404 (실패)
+<br>
+Body :
+
+```js
+{
+    "message": "존재하지 않는 사용자입니다",
+    "error": "Not Found",
+    "statusCode": 404
+}
+```
+
+## 3. 게시글 등록
+
+### **Request**
+
+URI : `/posts`
+<br>
+METHOD : `POST`
+<br>
+AUTHORIZATION : `Bearer {ACCESS_TOKEN}`
+<br>
+Body :
+
+```js
+{
+    "title": "post title example",
+    "content": "some post content"
+}
+```
+
+### **Response**
+
+Status Code : 201 (성공)
+<br>
+Body :
+
+```js
+{
+    "postId" : 1,
+}
+```
+
+## 4. 전체 게시글 조회
+
+### **Request**
+
+**URI : `/posts`**
+<br>
+**METHOD : `GET`**
+
+### **Response**
+
+Status Code : 200 (성공)
+<br>
+Body :
+
+```js
+[
+    {
+        id: 1,
+        title: "this is title1",
+        createdAt: "2024-02-25T19:12:24.000Z",
+    },
+    {
+        id: 2,
+        title: "this is title2",
+        createdAt: "2024-02-25T19:13:46.000Z",
+    },
+    {
+        id: 3,
+        title: "this is title3",
+        createdAt: "2024-02-25T19:38:19.000Z",
+    },
+    // ...
+];
+```
+
+## 5. 게시글 상세 조회
+
+### **Request**
+
+URI : `/posts/:id`
+<br>
+PARAM : `postId`
+<br>
+METHOD : `GET`
+
+### **Response**
+
+Status Code : 200 (성공)
+<br>
+Body :
+
+```js
+{
+    "id": 1,
+    "title": "this is title1",
+    "createdAt": "2024-02-25T19:12:24.000Z",
+    "content": "this is content",
+    "author": {
+        "id": 1,
+        "userId": "likelion",
+        "nickname": "likelionknu"
+    }
+}
+```
+
+<br>
+Status Code : 404 (실패)
+<br>
+Body :
+
+```js
+{
+    "message": "존재하지 않는 게시글입니다",
+    "error": "Not Found",
+    "statusCode": 404
+}
+```

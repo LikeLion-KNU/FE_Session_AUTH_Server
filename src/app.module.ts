@@ -6,7 +6,10 @@ import { UsersModule } from "./users/users.module";
 import { PostsModule } from "./posts/posts.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
-const RootEntities = [];
+import { UserModel } from "./models/user.model";
+import { PostModel } from "./models/post.model";
+
+const RootEntities = [UserModel, PostModel];
 
 const TypeOrmRootConfig = TypeOrmModule.forRoot({
     type: "sqlite",

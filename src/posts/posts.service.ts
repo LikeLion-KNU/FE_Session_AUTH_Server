@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { PostModel } from "src/models/post.model";
 import { Repository } from "typeorm";
@@ -18,11 +18,13 @@ export class PostsService {
         });
     }
 
-    public readPostById(postId: number) {
-        return this.postsRepository.findOne({
+    public async readPostById(postId: number) {
+        const post = await this.postsRepository.findOne({
             where: { id: postId },
             relations: { author: true },
         });
+        if (!post) throw new NotFoundException("존재하지 않는 게시글입니다");
+        return post;
     }
 
     public async createPost(user: UserModel, createPostDto: CreatePostDto) {
